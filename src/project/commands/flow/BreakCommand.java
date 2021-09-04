@@ -1,5 +1,6 @@
-package project.commands;
+package project.commands.flow;
 
+import project.commands.Command;
 import project.config.LoggerConfig;
 
 public class BreakCommand implements Command {

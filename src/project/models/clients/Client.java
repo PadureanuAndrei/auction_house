@@ -1,5 +1,8 @@
 package project.models.clients;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public abstract class Client {
     private static int clientId = 0;
 
@@ -8,6 +11,8 @@ public abstract class Client {
     protected String address;
     protected int total;
     protected int wined;
+
+    private final Map<Integer, Double> maxProductPrice = new HashMap<>();
 
     protected Client(String name, String address) {
         this.id = clientId++;
@@ -49,6 +54,14 @@ public abstract class Client {
 
     public void setWined(int wined) {
         this.wined = wined;
+    }
+
+    public void setMaxProductPrice(int productId, double price) {
+        maxProductPrice.put(productId, price);
+    }
+
+    public double getMaxProductPrice(int productId) {
+        return maxProductPrice.get(productId);
     }
 
     @Override

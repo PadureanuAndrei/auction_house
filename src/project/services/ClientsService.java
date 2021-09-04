@@ -1,37 +1,63 @@
 package project.services;
 
-import project.models.auctions.Auction;
+import project.config.AuctionsConfig;
+import project.config.LoggerConfig;
 import project.models.clients.Client;
+import project.models.products.Product;
 import project.repositories.ClientsRepository;
-import project.repositories.Repository;
+import project.repositories.ProductsRepository;
+
+import java.io.PrintStream;
+import java.util.List;
 
 
 public class ClientsService {
-    private final static ClientsService INSTANCE = new ClientsService();
+    private static final ClientsService INSTANCE = new ClientsService();
+    private static final PrintStream LOGGER = LoggerConfig.out;
 
     public static ClientsService getInstance() {
-        return ClientsService.INSTANCE;
+        return INSTANCE;
     }
 
-    private final Repository<Client> clients = ClientsRepository.getInstance();
-    private final BrokersService brokers = BrokersService.getInstance();
-    private final HostService host = HostService.getInstance();
+    private final ProductsRepository products = ProductsRepository.getInstance();
+    private final ClientsRepository clients = ClientsRepository.getInstance();
+    // Lazy loading. Circular dependency
+    private HostService host;
 
     private ClientsService() {}
 
-    public void entryInAuction(int clientId, int productId) {
-        host.entryInAuction(productId, clients.get(clientId));
+    public List<Product> getProducts() {
+        return products.all();
     }
 
-    public void auctionStarts(Client client, Auction auction) {
+    public void entryInAuction(int clientId, int productId, double maxPrice) {
+        if (host == null) {
+            host = HostService.getInstance();
+        }
 
+        Client client = clients.get(clientId);
+        client.setMaxProductPrice(productId, maxPrice);
+
+        host.entryInAuction(productId, client);
     }
 
-    public void auctionEndsSuccess(Client client, Auction auction) {
+    public double nextAuctionStep(Client client, int productId, int auctionStep, double minPrice) {
+        double maxPrice = client.getMaxProductPrice(productId);
+        double price = maxPrice <= minPrice ? minPrice :
+                                              minPrice + (maxPrice - minPrice) / (AuctionsConfig.MAX_STEPS - auctionStep);
 
+        LOGGER.println("[LICITATIE produs:" + productId + " | pas:" + auctionStep + " ] clientul id:" +
+                        client.getId() + " plateste " + price);
+
+        return price;
     }
 
-    public void auctionEndsFail(Client client, Auction auction) {
+    public void auctionEndsSuccess(Client client, int productId) {
+        LOGGER.println("[LICITATIE SUCCES] clientul id:" + client.getId() +
+                       " a castigat licitatia pentru produsul id:" + productId);
+    }
 
+    public void auctionEndsFail(int productId) {
+        LOGGER.println("[LICITATIE ESEC] produsul id:" + productId + " nu a fost vandut");
     }
 }

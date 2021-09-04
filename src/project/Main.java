@@ -1,6 +1,6 @@
 package project;
 
-import project.commands.BreakCommand;
+import project.commands.flow.BreakCommand;
 import project.commands.Command;
 import project.commands.CommandsParser;
 

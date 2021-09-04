@@ -3,8 +3,9 @@ package project.services;
 import project.models.auctions.Auction;
 import project.models.clients.Client;
 import project.models.employees.Broker;
+import project.models.products.Product;
 import project.repositories.AuctionsRepository;
-import project.repositories.BrokersRepository;
+import project.repositories.ProductsRepository;
 
 public class BrokersService {
     private static final BrokersService INSTANCE = new BrokersService();
@@ -13,7 +14,7 @@ public class BrokersService {
         return BrokersService.INSTANCE;
     }
 
-    private final BrokersRepository brokers = BrokersRepository.getInstance();
+    private final ProductsRepository products = ProductsRepository.getInstance();
     private final AuctionsRepository auctions = AuctionsRepository.getInstance();
     private final ClientsService clients = ClientsService.getInstance();
 
@@ -23,33 +24,39 @@ public class BrokersService {
         auction.setRegisteredClients(auction.getRegisteredClients() + 1);
     }
 
+    public double nextAuctionStep(Broker broker, Auction auction) {
+        Product product = products.get(auction.getId());
 
-    public void startAuction(Auction auction) {
-        brokers.all().forEach(broker -> {
-            broker.getClients(auction.getId()).forEach(client -> clients.auctionStarts(client, auction));
-        });
+        Client maxClient = null;
+        double maxPrice = -1;
+
+        for (Client client : broker.getClients(auction.getId())) {
+            double price = clients.nextAuctionStep(client, product.getId(), auction.getActualStep(), auction.getActualMaxPrice());
+
+            if (maxClient == null || (price == maxPrice && client.getTotal() > maxClient.getTotal())) {
+                maxClient = client;
+                maxPrice = price;
+            }
+        }
+
+        if (maxClient != null) {
+            broker.setMaxClientInAuction(auction.getId(), maxClient);
+        }
+
+        return maxPrice;
     }
 
-    public void sellProduct(Auction auction, Client winner) {
-        brokers.all().stream()
-                .flatMap(broker -> broker.getClients(auction.getId()).stream())
-                .filter(client -> !client.equals(winner))
-                .forEach(client -> clients.auctionEndsFail(client, auction));
+    public void sellProduct(Auction auction, Broker broker) {
+        Client client = broker.getMaxClientInAuction(auction.getId());
 
-        clients.auctionEndsSuccess(winner, auction);
+        clients.auctionEndsSuccess(client, auction.getProductId());
 
         auctions.remove(auction);
     }
 
-    private void restartAuction(Auction auction) {
-        brokers.all().stream()
-                .flatMap(broker -> broker.getClients(auction.getId()).stream())
-                .forEach(client -> clients.auctionEndsFail(client, auction));
+    public void resetAuction(Auction auction) {
+        clients.auctionEndsFail(auction.getProductId());
 
-        auction.setRegisteredClients(0);
-    }
-
-    private void removeAuction(Auction auction) {
-        auctions.remove(auction);
+        auctions.reset(auction);
     }
 }

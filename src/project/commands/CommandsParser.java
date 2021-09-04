@@ -1,5 +1,11 @@
 package project.commands;
 
+import project.commands.auctions.EnterInAuctionCommand;
+import project.commands.creational.*;
+import project.commands.display.ShowBrokersCommand;
+import project.commands.display.ShowClientsCommand;
+import project.commands.display.ShowProductsCommand;
+import project.commands.flow.BreakCommand;
 import project.config.ScannerConfig;
 import project.commands.exceptions.IllegalCommandTypeException;
 
@@ -29,6 +35,13 @@ public class CommandsParser {
             case "add_gem": return AddGemCommand.getInstance();
             case "add_furniture": return AddFurnitureCommand.getInstance();
             case "add_painting": return AddPaintingCommand.getInstance();
+
+            case "enter_auction": return EnterInAuctionCommand.getInstance();
+
+            case "show_products": return ShowProductsCommand.getInstance();
+            case "show_brokers": return ShowBrokersCommand.getInstance();
+            case "show_clients": return ShowClientsCommand.getInstance();
+
 
             case "break": return BreakCommand.getInstance();
 

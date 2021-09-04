@@ -9,6 +9,8 @@ public class AuctionsRepository extends Repository<Auction> {
         return AuctionsRepository.INSTANCE;
     }
 
+    private AuctionsRepository() {}
+
     private final ProductsRepository products = ProductsRepository.getInstance();
     private final BrokersRepository brokers = BrokersRepository.getInstance();
 

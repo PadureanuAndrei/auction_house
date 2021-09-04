@@ -1,5 +1,6 @@
-package project.commands;
+package project.commands.creational;
 
+import project.commands.Command;
 import project.models.clients.Client;
 import project.models.clients.NaturalPerson;
 import project.repositories.ClientsRepository;
@@ -21,7 +22,7 @@ public class RegisterNaturalPersonCommand implements Command {
 
     @Override
     public void execute() {
-        String[] params = SCANNER.nextLine().trim().split("\"");
+        String[] params = params();
 
         Client client = new NaturalPerson(params[1], params[3], params[5]);
         clients.add(client);

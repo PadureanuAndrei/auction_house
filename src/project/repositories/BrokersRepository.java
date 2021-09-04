@@ -12,6 +12,8 @@ public class BrokersRepository extends Repository<Broker> {
         return BrokersRepository.INSTANCE;
     }
 
+    private BrokersRepository() {}
+
     public void add(Broker broker) {
         super.add(broker.getId(), broker);
     }

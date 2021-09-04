@@ -5,7 +5,6 @@ import project.models.products.exceptions.UndefinedProductTypeException;
 public class ProductBuilder {
     private String name;
     private double minPrice;
-    private double soldPrice;
     private int year;
 
     private Class<? extends Product> productType;
@@ -25,11 +24,6 @@ public class ProductBuilder {
 
     public ProductBuilder minPrice(double minPrice) {
         this.minPrice = minPrice;
-        return this;
-    }
-
-    public ProductBuilder soldPrice(double soldPrice) {
-        this.soldPrice = soldPrice;
         return this;
     }
 

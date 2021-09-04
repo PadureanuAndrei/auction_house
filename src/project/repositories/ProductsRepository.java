@@ -11,9 +11,16 @@ public class ProductsRepository extends Repository<Product> {
         return ProductsRepository.INSTANCE;
     }
 
-    private final AuctionsRepository auctions = AuctionsRepository.getInstance();
+    private ProductsRepository() {}
+
+    // Lazy loading. Circular dependency
+    private AuctionsRepository auctions;
 
     public void add(Product product) {
+        if (auctions == null) {
+            auctions = AuctionsRepository.getInstance();
+        }
+
         super.add(product.getId(), product);
 
         Auction auction = new Auction(AuctionsConfig.MIN_CLIENTS, product.getId(), AuctionsConfig.MAX_STEPS);

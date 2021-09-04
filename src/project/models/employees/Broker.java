@@ -9,10 +9,11 @@ import java.util.Map;
 
 public class Broker extends Employee {
     private final Map<Integer, List<Client>> clientsInAuction = new HashMap<>();
+    private final Map<Integer, Client> maxClientInAuction = new HashMap<>();
 
     public void addClient(int auctionId, Client client) {
         clientsInAuction
-                .computeIfAbsent(auctionId, id -> new ArrayList<Client>())
+                .computeIfAbsent(auctionId, id -> new ArrayList<>())
                 .add(client);
     }
 
@@ -22,6 +23,14 @@ public class Broker extends Employee {
 
     public void remove(int auctionId) {
         clientsInAuction.remove(auctionId);
+    }
+
+    public void setMaxClientInAuction(int auctionId, Client client) {
+        maxClientInAuction.put(auctionId, client);
+    }
+
+    public Client getMaxClientInAuction(int auctionId) {
+        return maxClientInAuction.get(auctionId);
     }
 
     @Override

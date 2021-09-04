@@ -1,5 +1,6 @@
-package project.commands;
+package project.commands.creational;
 
+import project.commands.Command;
 import project.models.products.*;
 import project.services.AdminsService;
 
@@ -19,7 +20,7 @@ public class AddPaintingCommand implements Command {
 
     @Override
     public void execute() {
-        String[] params = SCANNER.nextLine().split("\"");
+        String[] params = params();
 
         Product product = new ProductBuilder()
                 .productType(Painting.class)

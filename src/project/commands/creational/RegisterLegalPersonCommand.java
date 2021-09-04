@@ -1,5 +1,6 @@
-package project.commands;
+package project.commands.creational;
 
+import project.commands.Command;
 import project.models.clients.Client;
 import project.models.clients.Company;
 import project.models.clients.LegalPerson;
@@ -21,7 +22,7 @@ public class RegisterLegalPersonCommand implements Command {
 
     @Override
     public void execute() {
-        String[] params = SCANNER.nextLine().trim().split("\"");
+        String[] params = params();
 
         Client client = new LegalPerson(params[1], params[3], Double.parseDouble(params[5].trim()), Company.valueOf(params[7]));
         clients.add(client);

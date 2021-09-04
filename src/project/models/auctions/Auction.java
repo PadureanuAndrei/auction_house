@@ -8,6 +8,8 @@ public class Auction {
     private int registeredClients;
     private int productId;
     private int maxSteps;
+    private int actualStep;
+    private double actualMaxPrice;
 
     public Auction(int minClients, int productId, int maxSteps) {
         this.id = auctionId++;
@@ -50,6 +52,22 @@ public class Auction {
 
     public void setMaxSteps(int maxSteps) {
         this.maxSteps = maxSteps;
+    }
+
+    public int getActualStep() {
+        return actualStep;
+    }
+
+    public void setActualStep(int actualStep) {
+        this.actualStep = actualStep;
+    }
+
+    public double getActualMaxPrice() {
+        return actualMaxPrice;
+    }
+
+    public void setActualMaxPrice(double actualMaxPrice) {
+        this.actualMaxPrice = actualMaxPrice;
     }
 
     @Override

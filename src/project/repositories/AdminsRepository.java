@@ -1,7 +1,6 @@
 package project.repositories;
 
 import project.models.employees.Admin;
-import project.models.products.Product;
 
 public class AdminsRepository extends Repository<Admin> {
     private static final AdminsRepository INSTANCE = new AdminsRepository();
@@ -9,6 +8,8 @@ public class AdminsRepository extends Repository<Admin> {
     public static AdminsRepository getInstance() {
         return AdminsRepository.INSTANCE;
     }
+
+    private AdminsRepository() {}
 
     public void add(Admin admin) {
         super.add(admin.getId(), admin);

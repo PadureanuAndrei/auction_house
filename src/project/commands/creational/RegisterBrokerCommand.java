@@ -1,5 +1,6 @@
-package project.commands;
+package project.commands.creational;
 
+import project.commands.Command;
 import project.models.employees.Broker;
 import project.repositories.BrokersRepository;
 

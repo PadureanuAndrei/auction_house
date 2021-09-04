@@ -1,8 +1,11 @@
 package project.repositories;
 
+import project.repositories.exception.UndefinedEntityException;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class Repository<T> {
     private final Map<Integer, T> cache = new HashMap<>();
@@ -19,5 +22,7 @@ public class Repository<T> {
         return List.copyOf(cache.values());
     }
 
-    public T get(int id) { return cache.get(id); }
+    public T get(int id) {
+        return Optional.of(cache.get(id)).orElseThrow(UndefinedEntityException::new);
+    }
 }

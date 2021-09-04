@@ -9,6 +9,8 @@ public class ClientsRepository extends Repository<Client> {
         return ClientsRepository.INSTANCE;
     }
 
+    private ClientsRepository() {}
+
     public void add(Client client) {
         add(client.getId(), client);
     }
