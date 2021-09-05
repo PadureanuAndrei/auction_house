@@ -10,6 +10,8 @@ public class AdminsService {
         return AdminsService.INSTANCE;
     }
 
+    private AdminsService() {}
+
     private final ProductsRepository products = ProductsRepository.getInstance();
 
     public void addProduct(Product product) {

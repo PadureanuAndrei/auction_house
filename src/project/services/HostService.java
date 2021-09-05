@@ -19,10 +19,11 @@ public class HostService {
         return HostService.INSTANCE;
     }
 
+    private HostService() {}
+
     private final AuctionsRepository allAuctions = AuctionsRepository.getInstance();
     private final BrokersRepository allBrokers = BrokersRepository.getInstance();
     private final ProductsRepository products = ProductsRepository.getInstance();
-
     private final BrokersService brokers = BrokersService.getInstance();
 
     public void entryInAuction(int productId, Client client) {
@@ -73,7 +74,7 @@ public class HostService {
     private void finishAuction(Auction auction, Broker maxBroker) {
         Product product = products.get(auction.getProductId());
 
-        if (auction.getActualMaxPrice() > product.getMinPrice()) {
+        if (auction.getActualMaxPrice() >= product.getMinPrice()) {
             sellProduct(auction, maxBroker);
         }
         else {

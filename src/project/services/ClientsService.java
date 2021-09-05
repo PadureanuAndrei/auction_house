@@ -2,7 +2,6 @@ package project.services;
 
 import project.config.AuctionsConfig;
 import project.config.LoggerConfig;
-import project.models.auctions.Commission;
 import project.models.clients.Client;
 import project.models.products.Product;
 import project.repositories.ClientsRepository;

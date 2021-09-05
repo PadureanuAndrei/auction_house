@@ -38,19 +38,11 @@ public class BrokersService {
         for (Client client : broker.getClients(auction.getId())) {
             double price = clients.nextAuctionStep(client, product.getId(), auction.getActualStep(), auction.getActualMaxPrice());
 
-//            if (auction.getActualStep() == 4) {
-//                System.out.println("price" + price + " | client id:" + client.getId());
-//            }
             if (maxClient == null || price > maxPrice || (price == maxPrice && client.getTotal() > maxClient.getTotal())) {
                 maxClient = client;
                 maxPrice = price;
             }
         }
-
-//        if (auction.getActualStep() == 4) {
-//            System.out.println("broker id:" + broker.getId() + " clients: " + broker.getClients(auction.getId()));
-//            System.out.println("max client: id:" + maxClient.getId());
-//        }
 
         if (maxClient != null) {
             broker.setMaxClientInAuction(auction.getId(), maxClient);
@@ -63,8 +55,9 @@ public class BrokersService {
         Client client = broker.getMaxClientInAuction(auction.getId());
 
         Commission commission = commissions.getCommission(client);
+        double priceWithCommission = commission.addCommission(auction.getActualMaxPrice());
 
-        clients.auctionEndsSuccess(client, auction.getProductId(), commission.addCommission(auction.getActualMaxPrice()));
+        clients.auctionEndsSuccess(client, auction.getProductId(), priceWithCommission);
 
         auctions.remove(auction);
     }
