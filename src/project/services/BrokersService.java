@@ -1,6 +1,8 @@
 package project.services;
 
 import project.models.auctions.Auction;
+import project.models.auctions.Commission;
+import project.models.auctions.CommissionFactory;
 import project.models.clients.Client;
 import project.models.employees.Broker;
 import project.models.products.Product;
@@ -14,9 +16,12 @@ public class BrokersService {
         return BrokersService.INSTANCE;
     }
 
+    private BrokersService() {}
+
     private final ProductsRepository products = ProductsRepository.getInstance();
     private final AuctionsRepository auctions = AuctionsRepository.getInstance();
     private final ClientsService clients = ClientsService.getInstance();
+    private final CommissionFactory commissions = CommissionFactory.getInstance();
 
 
     public void registerClientInAuction(Broker broker, Client client, Auction auction) {
@@ -33,11 +38,19 @@ public class BrokersService {
         for (Client client : broker.getClients(auction.getId())) {
             double price = clients.nextAuctionStep(client, product.getId(), auction.getActualStep(), auction.getActualMaxPrice());
 
-            if (maxClient == null || (price == maxPrice && client.getTotal() > maxClient.getTotal())) {
+//            if (auction.getActualStep() == 4) {
+//                System.out.println("price" + price + " | client id:" + client.getId());
+//            }
+            if (maxClient == null || price > maxPrice || (price == maxPrice && client.getTotal() > maxClient.getTotal())) {
                 maxClient = client;
                 maxPrice = price;
             }
         }
+
+//        if (auction.getActualStep() == 4) {
+//            System.out.println("broker id:" + broker.getId() + " clients: " + broker.getClients(auction.getId()));
+//            System.out.println("max client: id:" + maxClient.getId());
+//        }
 
         if (maxClient != null) {
             broker.setMaxClientInAuction(auction.getId(), maxClient);
@@ -49,7 +62,9 @@ public class BrokersService {
     public void sellProduct(Auction auction, Broker broker) {
         Client client = broker.getMaxClientInAuction(auction.getId());
 
-        clients.auctionEndsSuccess(client, auction.getProductId());
+        Commission commission = commissions.getCommission(client);
+
+        clients.auctionEndsSuccess(client, auction.getProductId(), commission.addCommission(auction.getActualMaxPrice()));
 
         auctions.remove(auction);
     }

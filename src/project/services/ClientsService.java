@@ -2,6 +2,7 @@ package project.services;
 
 import project.config.AuctionsConfig;
 import project.config.LoggerConfig;
+import project.models.auctions.Commission;
 import project.models.clients.Client;
 import project.models.products.Product;
 import project.repositories.ClientsRepository;
@@ -39,6 +40,8 @@ public class ClientsService {
         client.setMaxProductPrice(productId, maxPrice);
 
         host.entryInAuction(productId, client);
+
+        client.setTotal(client.getTotal() + 1);
     }
 
     public double nextAuctionStep(Client client, int productId, int auctionStep, double minPrice) {
@@ -52,9 +55,11 @@ public class ClientsService {
         return price;
     }
 
-    public void auctionEndsSuccess(Client client, int productId) {
+    public void auctionEndsSuccess(Client client, int productId, double totalPrice) {
         LOGGER.println("[LICITATIE SUCCES] clientul id:" + client.getId() +
                        " a castigat licitatia pentru produsul id:" + productId);
+
+        LOGGER.println("[BROKER COMMISSION]" + " suma totala = " + totalPrice);
     }
 
     public void auctionEndsFail(int productId) {

@@ -1,0 +1,21 @@
+register_natural_person "Cati Manners" "40005 Pierstorff Court" "4/10/1972"
+register_natural_person "Nealon Leyband" "69 Sycamore Way" "2/12/2005"
+register_natural_person "Ad Twiggs" "5 Montana Circle" "11/13/1996"
+register_natural_person "Chandal Pascho" "9 Dexter Street" "8/31/1969"
+register_natural_person "Whitney Bemwell" "28702 Meadow Valley Hill" "9/28/1982"
+
+
+register_broker
+register_broker
+
+register_admin
+
+add_gem "Necklace" "1400" "2015" "Gold" "true"
+
+enter_auction "0" "0" "2400"
+enter_auction "1" "0" "2500"
+enter_auction "2" "0" "2600"
+enter_auction "3" "0" "2700"
+enter_auction "4" "0" "2800"
+
+break

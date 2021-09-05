@@ -23,6 +23,7 @@ public class Broker extends Employee {
 
     public void remove(int auctionId) {
         clientsInAuction.remove(auctionId);
+        maxClientInAuction.remove(auctionId);
     }
 
     public void setMaxClientInAuction(int auctionId, Client client) {
