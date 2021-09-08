@@ -59,6 +59,8 @@ public class ClientsService {
                        " a castigat licitatia pentru produsul id:" + productId);
 
         LOGGER.println("[BROKER COMMISSION]" + " suma totala = " + totalPrice);
+
+        client.setWined(client.getWined() + 1);
     }
 
     public void auctionEndsFail(int productId) {

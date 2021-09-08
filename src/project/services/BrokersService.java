@@ -38,7 +38,7 @@ public class BrokersService {
         for (Client client : broker.getClients(auction.getId())) {
             double price = clients.nextAuctionStep(client, product.getId(), auction.getActualStep(), auction.getActualMaxPrice());
 
-            if (maxClient == null || price > maxPrice || (price == maxPrice && client.getTotal() > maxClient.getTotal())) {
+            if (maxClient == null || price > maxPrice || (price == maxPrice && client.getWined() > maxClient.getWined())) {
                 maxClient = client;
                 maxPrice = price;
             }
